@@ -137,6 +137,20 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    List<Unit> SortBySpeed()
+    {
+        List<Unit> speedList = new List<Unit>();
+        speedList.AddRange(playerUnits);
+        speedList.AddRange(enemyUnits);
+        speedList.Sort(SortBySpeed);
+        return speedList;
+    }
+
+    private int SortBySpeed(Unit x, Unit y)
+    {
+        return x.CompareTo(y);
+    }
+
     void EndBattle()
     {
         if (state == BattleState.WON)

@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour
 {
     private string unitName;
     private int damage;
+    private int speed;
     private int hitChanceBonus;     //Bonus to default hit chance
     private float hitChance;        //Percentage chance to hit target
     private float dodgeChance;      //Percentage to dodge attacks
@@ -16,6 +17,7 @@ public class Unit : MonoBehaviour
 
     public string UnitName { get => unitName; set => unitName = value; }
     public int Damage { get => damage; set => damage = value; }
+    public int Speed { get => speed; set => speed = value; }
     public int HitChanceBonus { get => hitChanceBonus; set => hitChanceBonus = value; }
     public float HitChance { get => hitChance; set => hitChance = value; }
     public float DodgeChance { get => dodgeChance; set => dodgeChance = value; }
@@ -39,5 +41,21 @@ public class Unit : MonoBehaviour
     public bool TakeDamage(int damage)
     {
         return true;
+    }
+
+    public int CompareTo(Unit y)
+    {
+        if(this.Speed > y.Speed)
+        {
+            return 1;
+        }
+        else if(this.Speed == y.Speed)
+        {
+            return 0;
+        }
+        else
+        {
+            return -1;
+        }
     }
 }
