@@ -38,107 +38,6 @@ public class BattleSystem : MonoBehaviour
 
         state = BattleState.COMBAT;
         StartCoroutine(ProcessCombat());
-        
-
-        /*if (isAutoBattle)
-        {
-            state = BattleState.PLAYERTURN;
-            StartCoroutine(ProcessPlayerTurn());
-        }
-        else
-        {
-            state = BattleState.PLAYERTURN;
-            PlayerTurn();
-        }*/
-    }
-
-    IEnumerator ProcessPlayerTurn()
-    {
-        
-        if (state == BattleState.PLAYERTURN)
-        {
-            for (int i = 0; i < playerUnits.Count; i++)
-            {
-                if (enemyUnits.Count > 0)
-                {
-                    int attackTargetIndex = UnityEngine.Random.Range(0, enemyUnits.Count);
-
-                    int damage = DamageHandler.ProcessCombat(playerUnits[i], enemyUnits[attackTargetIndex]);
-
-                    dialogueText.text =
-                        playerUnits[i].UnitName + " attacks " + enemyUnits[attackTargetIndex].UnitName + " for " + damage;
-
-                    bool isDead = enemyUnits[attackTargetIndex].TakeDamage(damage);
-
-                    yield return new WaitForSeconds(waitTime);
-
-                    if (isDead)
-                    {
-                        enemyUnits.Remove(enemyUnits[attackTargetIndex]);
-
-                        if (enemyUnits.Count == 0)
-                        {
-                            state = BattleState.WON;
-                            EndBattle();
-                            
-                        }
-                    }
-                }
-            }
-        }
-
-        yield return new WaitForSeconds(waitTime);
-
-        state = BattleState.ENEMYTURN;
-        StartCoroutine(ProcessEnemyTurn());
-    }
-
-    IEnumerator ProcessEnemyTurn()
-    {
-        if (state == BattleState.ENEMYTURN)
-        {
-            for (int i = 0; i < enemyUnits.Count; i++)
-            {
-                if (playerUnits.Count > 0)
-                {
-                    int attackTargetIndex = UnityEngine.Random.Range(0, playerUnits.Count);
-
-                    int damageDealt = DamageHandler.DealDamage(enemyUnits[i].Damage);
-
-                    dialogueText.text =
-                        enemyUnits[i].UnitName + " attacks " + playerUnits[attackTargetIndex].UnitName + " for " + damageDealt;
-
-                    bool isDead = playerUnits[attackTargetIndex].TakeDamage(damageDealt);
-
-                    yield return new WaitForSeconds(waitTime);
-
-                    if (isDead)
-                    {
-                        playerUnits.Remove(playerUnits[attackTargetIndex]);
-
-                        if (playerUnits.Count == 0)
-                        {
-                            state = BattleState.LOST;
-                            EndBattle();
-                        }
-                    }
-                }
-            }
-        }
-
-        yield return new WaitForSeconds(waitTime);
-
-        if (isAutoBattle)
-        {
-            state = BattleState.PLAYERTURN;
-            StartCoroutine(ProcessPlayerTurn());
-        }
-        else
-        {
-            state = BattleState.PLAYERTURN;
-            ToggleEndOfTurnButton();
-            PlayerTurn();
-        }
     }
 
     IEnumerator ProcessCombat()
@@ -266,20 +165,6 @@ public class BattleSystem : MonoBehaviour
         else if (state == BattleState.LOST)
         {
             dialogueText.text = "You were defeated";
-        }
-    }
-
-    void PlayerTurn()
-    {
-        dialogueText.text = "Choose an action:";
-    }
-
-    public void OnEndTurnButton()
-    {
-        if (state == BattleState.PLAYERTURN)
-        {
-            StartCoroutine(ProcessPlayerTurn());
-            ToggleEndOfTurnButton();
         }
     }
 
