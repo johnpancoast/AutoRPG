@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
-public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
+public enum BattleState { START, COMBAT, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystem : MonoBehaviour
 {
@@ -18,26 +18,29 @@ public class BattleSystem : MonoBehaviour
 
     public List<Unit> playerUnits = new List<Unit>();
     public List<Unit> enemyUnits = new List<Unit>();
+    public List<Unit> speedList = new List<Unit>();
 
     public GameObject endTurnButton;
+
+    static System.Random rnd = new System.Random();
 
     // Start is called before the first frame update
     void Start()
     {
         state = BattleState.START;
+        SortBySpeed();
         StartCoroutine(SetupBattle());
-
-        if (isAutoBattle)
-        {
-            ToggleEndOfTurnButton();
-        }
     }
 
     IEnumerator SetupBattle()
     {
         yield return new WaitForSeconds(2f);
 
-        if (isAutoBattle)
+        state = BattleState.COMBAT;
+        StartCoroutine(ProcessCombat());
+        
+
+        /*if (isAutoBattle)
         {
             state = BattleState.PLAYERTURN;
             StartCoroutine(ProcessPlayerTurn());
@@ -46,7 +49,7 @@ public class BattleSystem : MonoBehaviour
         {
             state = BattleState.PLAYERTURN;
             PlayerTurn();
-        }
+        }*/
     }
 
     IEnumerator ProcessPlayerTurn()
@@ -77,6 +80,7 @@ public class BattleSystem : MonoBehaviour
                         {
                             state = BattleState.WON;
                             EndBattle();
+                            
                         }
                     }
                 }
@@ -137,18 +141,120 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    List<Unit> SortBySpeed()
+    IEnumerator ProcessCombat()
     {
-        List<Unit> speedList = new List<Unit>();
-        speedList.AddRange(playerUnits);
-        speedList.AddRange(enemyUnits);
-        speedList.Sort(SortBySpeed);
-        return speedList;
+        Debug.Log("Processing Combat");
+        yield return new WaitForSeconds(2f);
+
+        while (state == BattleState.COMBAT)
+        {
+            yield return new WaitForSeconds(2f);
+            for (int i = 0; i < speedList.Count; i++)
+            {
+                if (speedList[i] != null)
+                {
+                    Debug.Log("Error check: speedList null check");
+                    if (playerUnits.Contains(speedList[i]))
+                    {
+                        int defenderIndex = rnd.Next(enemyUnits.Count - 1);
+                        Unit defender = enemyUnits[defenderIndex];
+                        int damage = DamageHandler.ProcessCombat(speedList[i], defender);
+                        Debug.Log(speedList[i].UnitName + " deals " + damage);
+                        bool isDead = defender.TakeDamage(damage);
+                        Debug.Log("combat check");
+
+                        if (isDead)
+                        {
+                            enemyUnits.Remove(enemyUnits[defenderIndex]);
+
+                            if (enemyUnits.Count == 0)
+                            {
+                                state = BattleState.WON;
+                                EndBattle();
+                            }
+                        }
+                    }
+                    else if (enemyUnits.Contains(speedList[i]))
+                    {
+                        int defenderIndex = rnd.Next(playerUnits.Count - 1);
+                        Unit defender = playerUnits[defenderIndex];
+                        int damage = DamageHandler.ProcessCombat(speedList[i], defender);
+                        Debug.Log(speedList[i].UnitName +" deals " +damage);
+                        bool isDead = defender.TakeDamage(damage);
+
+                        if (isDead)
+                        {
+                            playerUnits.Remove(playerUnits[defenderIndex]);
+
+                            if (playerUnits.Count == 0)
+                            {
+                                state = BattleState.LOST;
+                                EndBattle();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    private int SortBySpeed(Unit x, Unit y)
+    List<Unit> SortBySpeed()
     {
-        return x.CompareTo(y);
+        speedList = new List<Unit>();
+        for (int i = 0; i < playerUnits.Count; i++)
+        {
+            Unit unit = playerUnits[i];
+            if (unit.speed == Unit.Speed.FAST)
+            {
+                speedList.Add(unit);
+            }
+        }
+
+        for (int i = 0; i < enemyUnits.Count; i++)
+        {
+            Unit unit = enemyUnits[i];
+            if (unit.speed == Unit.Speed.FAST)
+            {
+                speedList.Add(unit);
+            }
+        }
+
+        for (int i = 0; i < playerUnits.Count; i++)
+        {
+            Unit unit = playerUnits[i];
+            if (unit.speed == Unit.Speed.NORMAL)
+            {
+                speedList.Add(unit);
+            }
+        }
+
+        for (int i = 0; i < enemyUnits.Count; i++)
+        {
+            Unit unit = enemyUnits[i];
+            if (unit.speed == Unit.Speed.NORMAL)
+            {
+                speedList.Add(unit);
+            }
+        }
+
+        for (int i = 0; i < playerUnits.Count; i++)
+        {
+            Unit unit = playerUnits[i];
+            if (unit.speed == Unit.Speed.SLOW)
+            {
+                speedList.Add(unit);
+            }
+        }
+
+        for (int i = 0; i < enemyUnits.Count; i++)
+        {
+            Unit unit = enemyUnits[i];
+            if (unit.speed == Unit.Speed.SLOW)
+            {
+                speedList.Add(unit);
+            }
+        }
+        return speedList;
     }
 
     void EndBattle()

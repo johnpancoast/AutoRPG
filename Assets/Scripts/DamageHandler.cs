@@ -20,7 +20,8 @@ public class DamageHandler
     {
         int netDamage = 0;
 
-        float toHit = (attacker.HitChance * (attacker.HitChanceBonus - defender.DodgeChance));
+        float toHit = (attacker.HitChance - (attacker.HitChanceBonus - defender.DodgeChance));
+        Debug.Log(toHit);
         if (Random.Range(0.0f, 1.0f) > toHit)
         {
             return 0;

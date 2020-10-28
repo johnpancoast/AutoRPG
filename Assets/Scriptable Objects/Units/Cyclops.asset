@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09dcef932ce75274baa8ae3640ccf2b1, type: 3}
+  m_Name: Cyclops
+  m_EditorClassIdentifier: 
+  unitName: Cyclops
+  damage: 5
+  health: 100
+  speed: 1
+  hitChanceBonus: 0.05
+  hitChance: 1
+  dodgeChance: 0.05
+  critChance: 1
+  critDamageBonus: 0
+  armorRating: 0.01
+  magicResistance: 0.01
+  art: {fileID: 21300000, guid: a44bae8bb14009a48a446c75ae8347cc, type: 3}
