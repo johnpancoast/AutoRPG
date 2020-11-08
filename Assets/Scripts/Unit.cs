@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
     public GameObject CardArt;
     public TextMeshPro HealthText;
 
+    public bool isAttacking = false;
     private string unitName;
     private int damage;
     private int health;
@@ -22,6 +23,8 @@ public class Unit : MonoBehaviour
     private float armorRating;      
     private float magicResistance;
     private Sprite art;
+
+    Animator animator;
     public Speed speed = Speed.NORMAL;
 
     public string UnitName { get => unitName; set => unitName = value; }
@@ -42,6 +45,7 @@ public class Unit : MonoBehaviour
     {
         unitName = UnitValues.unitName;
         CardNameText.text = unitName;
+        transform.name = unitName;
         damage = UnitValues.damage;
         health = UnitValues.health;
         SetSpeed();
@@ -55,6 +59,9 @@ public class Unit : MonoBehaviour
         art = UnitValues.art;
         SpriteRenderer spriteRenderer = CardArt.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = art;
+        HealthText.text = "Health: " + Health.ToString();
+
+        animator = GetComponent<Animator>();
         
     }
 
@@ -71,6 +78,7 @@ public class Unit : MonoBehaviour
         if (Health <= 0)
         {
             HealthText.text = "Health: 0";
+            Debug.Log(UnitName + " dies!");
             return true;
         }
         else

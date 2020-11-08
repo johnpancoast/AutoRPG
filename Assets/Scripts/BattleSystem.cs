@@ -9,9 +9,6 @@ public enum BattleState { START, COMBAT, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystem : MonoBehaviour
 {
-    private float waitTime = 0.3f;
-    private bool isAutoBattle = true;
-
     public TextMeshProUGUI dialogueText;
 
     public BattleState state;
@@ -47,20 +44,19 @@ public class BattleSystem : MonoBehaviour
 
         while (state == BattleState.COMBAT)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(.2f);
             for (int i = 0; i < speedList.Count; i++)
             {
+                yield return new WaitForSeconds(1f);
                 if (speedList[i] != null)
                 {
-                    Debug.Log("Error check: speedList null check");
-                    if (playerUnits.Contains(speedList[i]))
+                    if (playerUnits.Contains(speedList[i]) && enemyUnits.Count > 0)
                     {
                         int defenderIndex = rnd.Next(enemyUnits.Count - 1);
+                        Unit attacker = speedList[i];
                         Unit defender = enemyUnits[defenderIndex];
-                        int damage = DamageHandler.ProcessCombat(speedList[i], defender);
-                        Debug.Log(speedList[i].UnitName + " deals " + damage);
+                        int damage = DamageHandler.ProcessCombat(attacker, defender);
                         bool isDead = defender.TakeDamage(damage);
-                        Debug.Log("combat check");
 
                         if (isDead)
                         {
@@ -73,12 +69,12 @@ public class BattleSystem : MonoBehaviour
                             }
                         }
                     }
-                    else if (enemyUnits.Contains(speedList[i]))
+                    else if (enemyUnits.Contains(speedList[i]) && playerUnits.Count > 0)
                     {
                         int defenderIndex = rnd.Next(playerUnits.Count - 1);
+                        Unit attacker = speedList[i];
                         Unit defender = playerUnits[defenderIndex];
-                        int damage = DamageHandler.ProcessCombat(speedList[i], defender);
-                        Debug.Log(speedList[i].UnitName +" deals " +damage);
+                        int damage = DamageHandler.ProcessCombat(attacker, defender);
                         bool isDead = defender.TakeDamage(damage);
 
                         if (isDead)

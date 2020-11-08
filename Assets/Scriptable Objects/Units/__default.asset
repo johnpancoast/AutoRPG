@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09dcef932ce75274baa8ae3640ccf2b1, type: 3}
-  m_Name: Adventurer
+  m_Name: __default
   m_EditorClassIdentifier: 
-  unitName: Adventurer
+  unitName: --default--
   damage: 5
   health: 100
   speed: 0
-  hitChanceBonus: 0.05
+  hitChanceBonus: 0
   hitChance: 0.85
   dodgeChance: 0.05
   critChance: 0.05
   critDamageBonus: 0
-  armorRating: 0.01
-  magicResistance: 0.01
-  art: {fileID: 21300000, guid: db6a1b0036aec1d48a1b181e0c31c0d3, type: 3}
+  armorRating: 0
+  magicResistance: 0
+  art: {fileID: 0}

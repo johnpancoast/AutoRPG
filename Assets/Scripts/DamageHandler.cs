@@ -20,10 +20,13 @@ public class DamageHandler
     {
         int netDamage = 0;
 
-        float toHit = (attacker.HitChance - (attacker.HitChanceBonus - defender.DodgeChance));
-        Debug.Log(toHit);
-        if (Random.Range(0.0f, 1.0f) > toHit)
+        float toHit = (attacker.HitChance - (defender.DodgeChance - attacker.HitChanceBonus));
+        Debug.Log(attacker.UnitName + "'s chance to hit is " + toHit.ToString());
+        float roll = Random.Range(0.0f, 1.0f);
+        Debug.Log("Roll is: " + roll);
+        if (roll > toHit)
         {
+            Debug.Log(attacker.UnitName + " misses.");
             return 0;
         }
 

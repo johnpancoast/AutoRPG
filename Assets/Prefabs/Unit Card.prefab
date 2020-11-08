@@ -399,9 +399,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitValues: {fileID: 0}
-  CardNameText: {fileID: 0}
-  CardArt: {fileID: 0}
+  CardNameText: {fileID: 7278955833638638412}
+  CardArt: {fileID: 7278955832918505024}
   HealthText: {fileID: 2846175178630625002}
+  isAttacking: 0
   speed: 1
 --- !u!1 &7278955833468040977
 GameObject:
